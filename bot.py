@@ -6,11 +6,16 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from config import BOT_TOKEN
 from handlers import registration
 
+from database.db import init_db
+
+
 async def main():
     bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
     dp = Dispatcher(storage=MemoryStorage())
 
     dp.include_router(registration.router)
+
+    init_db()
 
     await dp.start_polling(bot)
 

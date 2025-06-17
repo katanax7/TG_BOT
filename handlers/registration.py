@@ -3,6 +3,9 @@ from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.fsm.context import FSMContext
 from states.registration import Registration
 
+from database.db import add_user
+
+
 router = Router()
 
 roles_kb = ReplyKeyboardMarkup(
@@ -41,6 +44,12 @@ async def enter_name(message: Message, state: FSMContext):
 async def confirm_registration(message: Message, state: FSMContext):
     data = await state.get_data()
     # тут будет сохранение в БД
+    add_user(
+        telegram_id=message.from_user.id,
+        name=data["name"],
+        role=data["role"]
+    )
+
     await message.answer("Регистрация завершена! 🎉", reply_markup=None)
     await state.clear()
 
